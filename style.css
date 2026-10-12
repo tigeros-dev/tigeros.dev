@@ -1,0 +1,52 @@
+/* Persönliche Seite · baut ausschließlich auf design_tokens.css (tigerOS-Design-System) auf.
+   Einzige Erweiterung: --fs-read für Lesetext (die Systemskala ist für Cockpits ausgelegt). */
+@import url("design_tokens.css");
+:root { --fs-read: 18px; --fs-title: 46px; --spalte: 680px;
+  /* Ableitung nach lucumr.pocoo.org: Nachtblau statt Schwarz, Serifenschrift, helle Links */
+  --font-read: Charter, "Iowan Old Style", "Bitstream Charter", Georgia, serif; }
+:root[data-theme="dark"] { --bg: #131c2e; --border: #24324d; --titel: #a5b4cf; --sand: #e8c27a; --sand-hell: #f3d9a4; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-read); font-size: var(--fs-read); line-height: 1.65; }
+.seite { max-width: var(--spalte); margin: 0 auto; padding: calc(var(--sp-12) * 1.5) var(--sp-6) var(--sp-12); }
+header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: calc(28.6vw - 100px); }
+.name { font-weight: 600; color: var(--text); text-decoration: none; letter-spacing: -0.01em; font-family: var(--font); }
+/* Streifen des Beutelwolfs: geometrisch, abnehmende Höhe wie die Rückenstreifen, nur in --brand-thylacine */
+.name::before { content: ""; display: inline-block; width: 22px; height: 14px; margin-right: var(--sp-3); vertical-align: -1px;
+  background:
+    linear-gradient(var(--brand-thylacine), var(--brand-thylacine)) 0 0 / 3px 14px no-repeat,
+    linear-gradient(var(--brand-thylacine), var(--brand-thylacine)) 6px 1px / 3px 12px no-repeat,
+    linear-gradient(var(--brand-thylacine), var(--brand-thylacine)) 12px 2px / 3px 10px no-repeat,
+    linear-gradient(var(--brand-thylacine), var(--brand-thylacine)) 18px 3px / 3px 8px no-repeat; }
+h2::before { content: ""; display: inline-block; width: 16px; height: 10px; margin-right: var(--sp-3); vertical-align: 4px;
+  background:
+    linear-gradient(var(--brand-thylacine), var(--brand-thylacine)) 0 0 / 2px 10px no-repeat,
+    linear-gradient(var(--brand-thylacine), var(--brand-thylacine)) 5px 1px / 2px 8px no-repeat,
+    linear-gradient(var(--brand-thylacine), var(--brand-thylacine)) 10px 2px / 2px 6px no-repeat; }
+body::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 28.6vw; max-height: 440px; min-height: 200px; z-index: 0; pointer-events: none;
+  background: url("bilder/kopf.png") no-repeat center bottom / cover;
+  -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 85%, transparent 100%); }
+/* Kopfzeile steht im gelben Himmel: dunkle Schrift, Streifen-Marke im Hintergrundton */
+header .name, header nav a { color: var(--text); }
+header nav a { opacity: .7; } header nav a.aktiv, header nav a:hover { opacity: 1; color: var(--text); }
+.seite { position: relative; z-index: 1; }
+nav a { color: var(--muted); text-decoration: none; margin-left: var(--sp-6); font-size: var(--fs-body); font-family: var(--font); }
+nav a:hover, nav a.aktiv { color: var(--text); }
+h1 { font-size: var(--fs-title); line-height: 1.15; font-weight: 400; letter-spacing: -0.01em; color: var(--titel); margin: 0 0 var(--sp-8); }
+h1.klein { font-size: 34px; }
+h2 { font-size: 30px; font-weight: 400; color: var(--titel); margin: var(--sp-12) 0 var(--sp-4); line-height: 1.2; }
+p { margin: 0 0 var(--sp-6); }
+a { color: var(--sand); text-decoration: underline; text-decoration-color: rgba(232,194,122,.45); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--sand-hell); text-decoration-color: var(--sand-hell); }
+.zeile { font-size: var(--fs-lead); color: var(--muted); margin-bottom: var(--sp-8); }
+ul.liste { list-style: none; padding: 0; margin: 0; }
+ul.liste li { display: flex; gap: var(--sp-6); padding: var(--sp-3) 0; border-bottom: 1px solid var(--border); }
+ul.liste .datum { color: var(--faint); font-size: var(--fs-body); min-width: 96px; font-variant-numeric: tabular-nums; }
+.hinweis { color: var(--muted); font-size: var(--fs-body); }
+.avatar { width: 150px; height: 150px; object-fit: cover; float: right; margin: var(--sp-2) 0 var(--sp-4) var(--sp-8); border-radius: var(--r-sm); }
+article .datum { color: var(--faint); font-size: var(--fs-body); margin-bottom: var(--sp-12); display: block; }
+footer { margin-top: calc(var(--sp-12) * 2); padding-top: var(--sp-6); border-top: 1px solid var(--border); color: var(--faint); font-size: var(--fs-label); }
+footer a { color: var(--muted); margin-right: var(--sp-4); text-decoration-color: var(--border); }
+footer p { margin: var(--sp-3) 0 0; }
+@media (max-width: 520px) { header { flex-direction: column; gap: var(--sp-3); } nav a { margin: 0 var(--sp-6) 0 0; } .seite { padding-top: var(--sp-12); } }

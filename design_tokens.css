@@ -1,0 +1,73 @@
+/* Design tokens (tigerOS design system) */
+/* tigerOS Design System — Kern-Tokens (plattform-neutral, Web-Ausprägung).
+ * EINE Quelle für Farbe/Spacing/Type/Radius. Alle Seiten laden diese Datei.
+ * Kunden-CI: nur die Farb-/Brand-Tokens überschreiben → gleiche Komponenten, andere Haut.
+ * Reihenfolge: Komponenten (EW-Demo) → diese Tokens → Content. Siehe Skill tigerOS-design-system. */
+
+:root {
+  /* ── Spacing (8pt-Basis) ── */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-6: 24px; --sp-8: 32px; --sp-12: 48px;
+
+  /* ── Type-Scale ── */
+  --fs-caption: 12px;  --fs-label: 13px;  --fs-body: 14.5px;
+  --fs-lead: 20px;     --fs-h1: 28px;
+  --fw-reg: 500; --fw-med: 600; --fw-bold: 700; --fw-black: 800;
+  --ls-label: .06em;  /* letter-spacing für uppercase-Labels */
+  --font: -apple-system, system-ui, sans-serif;
+
+  /* ── Radius ── */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-pill: 22px;
+
+  /* ── Shadow (eine Stufe) ── */
+  --shadow: 0 1px 3px rgba(15,23,42,.04);
+  --shadow-lift: 0 8px 22px rgba(13,148,136,.12);
+
+  /* ── Accent (Marke) ── */
+  --accent: #0d9488; --accent-bright: #2dd4bf; --accent-tint: #f0fdfa;
+
+  /* ── Severity (Status — systemweit konsistent; Dot-/Flächen-Farben) ── */
+  --sev-hi: #ef4444; --sev-mid: #f59e0b; --sev-lo: #22c55e; --sev-safety: #b91c1c;
+  --sev-safety-tint: #fef2f2;
+  /* Text-taugliche Semantik-Farben (dunkler als Severity-Dots → WCAG-AA-Kontrast auf hell).
+     NICHT vom Kunden-Akzent kapern lassen: „warn"=Orange, „ok"=Grün — bleiben Status, nie Marke. */
+  --warn: #c2410c; --ok: #059669;
+
+  /* ── Brand ── */
+  --brand-thylacine: #f97316;
+
+  /* ── Farben · HELL (default) ── */
+  --bg: #f4f6f9; --surface: #ffffff; --border: #e6ebf1;
+  --text: #0f172a; --muted: #64748b; --faint: #94a3b8;
+  --chip-bg: #f8fafc; --chip-border: #eef2f6;
+}
+
+/* ── Farben · DUNKEL (tigerOS-Signatur: Command-Deck) ── */
+:root[data-theme="dark"], .theme-dark {
+  --bg: #0a0f1a; --surface: #131c2e; --border: #1e293b;
+  --text: #e2e8f0; --muted: #94a3b8; --faint: #64748b;
+  --chip-bg: #0d1422; --chip-border: #1e293b;
+  --accent: #2dd4bf; --accent-tint: #052e2b;
+  --shadow: 0 20px 60px rgba(0,0,0,.4);
+  /* Tints müssen im dunklen Theme mitkippen — sonst reißen helle Flächen ins Command-Deck
+     (gefunden 2026-07-20 im Render-Gate: Bruch-Karte + Alarm-Banner wurden weiß). */
+  --sev-safety-tint: #1C1315;
+  --sev-hi-tint: #2A0F11;
+  --warn: #d9a441;   /* auf dunklem Grund lesbar (hell-Variante #c2410c ist zu dunkel) */
+  --ok:   #46a758;
+}
+
+/* ── Basis-Komponenten (auf Tokens, nicht Pixel) ── */
+.ds-nav a { font-size:var(--fs-label); font-weight:var(--fw-med); color:var(--muted);
+  padding:7px var(--fs-body); border-radius:var(--r-sm); background:var(--surface); border:1px solid var(--border); text-decoration:none; }
+.ds-nav a.here { background:var(--accent); color:#fff; border-color:var(--accent); }
+.ds-eyebrow { font-size:var(--fs-label); font-weight:var(--fw-bold); letter-spacing:var(--ls-label);
+  text-transform:uppercase; color:var(--accent); }
+.ds-h1 { font-size:var(--fs-h1); font-weight:var(--fw-black); letter-spacing:-.02em; color:var(--text); }
+.ds-panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+.ds-pl { font-size:var(--fs-caption); font-weight:var(--fw-bold); letter-spacing:var(--ls-label);
+  text-transform:uppercase; color:var(--faint); padding:var(--sp-4) var(--sp-4) var(--sp-2); }
+.ds-kpi-val { font-size:34px; font-weight:var(--fw-black); line-height:1; }
+.ds-kpi-val.warn { color:var(--warn); }
+.ds-verdict { background:linear-gradient(120deg,var(--accent),var(--accent-bright)); border-radius:var(--r-md);
+  padding:var(--sp-6); color:#fff; }
