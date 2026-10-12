@@ -57,8 +57,46 @@ footer p { margin: var(--sp-3) 0 0; }
   h1 { font-size: 34px; }
   .avatar { width: 112px; height: 112px; margin-left: var(--sp-4); }
 }
-/* Artikel mit Befehlen und Aufzählungen (agent-gate, Okt. 2026) */
-article code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .88em; padding: .1em .35em; border-radius: var(--r-sm); background: var(--surface); }
+/* Artikel-Bausteine (Komponenten aus dem tigerOS-Design-System, Haut der Homepage: Sand und Thylacine statt Teal) */
+article code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .86em; padding: .08em .35em; border-radius: var(--r-sm); background: var(--chip-bg); border: 1px solid var(--border); }
 article ul { padding-left: 1.2em; margin: 0 0 var(--sp-6); }
 article li { margin-bottom: var(--sp-3); }
+.eyebrow { font-family: var(--font); font-size: var(--fs-caption); font-weight: var(--fw-bold); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--faint); }
+/* Panel: Fläche hebt sich vom Nachtblau ab */
+.panel { background: var(--chip-bg); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-6); margin: 0 0 var(--sp-8); }
+.panel p:last-child { margin-bottom: 0; }
+/* Zwei Experimente als Option-Cards, die zweite ist der Fall, um den es geht */
+.faelle { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin: 0 0 var(--sp-8); }
+.fall { background: var(--chip-bg); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-3); }
+.fall.treffer { border-color: var(--brand-thylacine); }
+.fall h3 { font-size: 21px; font-weight: 400; color: var(--titel); margin: 0; line-height: 1.25; }
+.fall p { font-size: 16px; line-height: 1.55; margin: 0; }
+.fall .zitat { font-style: italic; color: var(--muted); }
+.urteil { margin-top: auto; padding-top: var(--sp-3); border-top: 1px solid var(--border); font-family: var(--font); font-size: var(--fs-label); color: var(--muted); }
+.urteil b { font-weight: var(--fw-bold); }
+.urteil .modell { color: var(--sand); } .urteil .tor { color: var(--sev-hi); }
+/* Terminal: die echte Ausgabe des Gates */
+.terminal { background: #0b111d; border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-4) var(--sp-6); margin: 0 0 var(--sp-8); font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13.5px; line-height: 1.6; color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere; }
+.terminal .prompt { color: var(--faint); } .terminal .deny { color: var(--sev-hi); font-weight: 600; } .terminal .wert { color: var(--sand); }
+/* Kernsatz: eine Aussage pro Fläche */
+.kernsatz { border-left: 3px solid var(--brand-thylacine); padding: var(--sp-2) 0 var(--sp-2) var(--sp-6); margin: var(--sp-8) 0; font-size: 26px; line-height: 1.35; color: var(--titel); }
+/* Ablauf: Agent -> Gate -> OPA -> Urteil */
+.fluss { display: flex; align-items: stretch; gap: var(--sp-2); margin: 0 0 var(--sp-8); font-family: var(--font); }
+.fluss .schritt { flex: 1; background: var(--chip-bg); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-3) var(--sp-4); }
+.fluss .schritt.gate { border-color: var(--brand-thylacine); }
+.fluss .schritt b { display: block; font-size: var(--fs-body); color: var(--text); font-weight: var(--fw-bold); }
+.fluss .schritt span { font-size: var(--fs-caption); color: var(--muted); line-height: 1.4; display: block; margin-top: 2px; }
+.fluss .pfeil { align-self: center; color: var(--faint); font-size: 18px; }
+.fluss .schritt b span { display: inline; font-size: inherit; margin: 0; }
+.fluss .ja { color: var(--ok); } .fluss .nein { color: var(--sev-hi); }
+/* Regeln als Fact-Chips mit Erklärung */
+.regeln { display: grid; grid-template-columns: max-content 1fr; gap: var(--sp-3) var(--sp-4); margin: 0 0 var(--sp-8); align-items: baseline; }
+.chip { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: var(--fs-caption); font-weight: 600; letter-spacing: .04em; padding: 3px 10px; border-radius: var(--r-pill); border: 1px solid var(--brand-thylacine); color: var(--brand-thylacine); background: transparent; }
+.regeln dd { margin: 0; font-size: 16px; line-height: 1.5; }
 article .quellen { font-size: var(--fs-body); color: var(--muted); border-top: 1px solid var(--border); padding-top: var(--sp-4); margin-top: var(--sp-12); }
+@media (max-width: 640px) {
+  .faelle { grid-template-columns: 1fr; }
+  .fluss { flex-direction: column; } .fluss .pfeil { transform: rotate(90deg); }
+  .kernsatz { font-size: 22px; }
+  .regeln { grid-template-columns: 1fr; gap: var(--sp-1); } .regeln dd { margin-bottom: var(--sp-3); }
+}
