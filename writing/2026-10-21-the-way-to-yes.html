@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The way to yes · Dominik Dietrich</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="seite">
+<header>
+  <a class="name" href="../index.html">Dominik Dietrich</a>
+  <nav><a href="../index.html">About</a><a href="../writing.html" class="aktiv">Writing</a><a href="../projects.html">Projects</a></nav>
+</header>
+<main>
+<article>
+<span class="eyebrow">My second contribution · agent-approve</span>
+<h1 class="klein">The way to yes</h1>
+<span class="datum">October 21, 2026</span>
+
+<p>Last week I asked whether I could talk my own coding agent into leaking data. It took a small gate to stop it, because the model judges how something looks and a gate judges what it does. I ended with a promise: a good boundary is only half the story. The other half is a controlled path to yes.</p>
+<p>This is that half.</p>
+<p>I build with AI, using what twenty years of platform work taught me. I don’t write the code and I don’t review it. What I do control is direction and blast radius. Which leads to a simple question: how much can my system do without asking me?</p>
+
+<h2>The bottleneck was me</h2>
+<p>A gate that says no is the easy part. Every no ends up somewhere, and in my setup it ends up with me. When a decision needed me, the work waited until I had time.</p>
+<p>If every step waits for my approval, I haven’t built autonomy. I have built a queue with myself at the end of it.</p>
+
+<h2>Four questions instead of a diff</h2>
+<p>A typo in documentation and a change to a security policy are both “a change to a file”. Their consequences have nothing in common. So I don’t draw the line by tool or by file. I draw it by impact:</p>
+<ol>
+  <li><strong>What is affected?</strong> Data, services, security rules, and who owns them.</li>
+  <li><strong>How far does it reach?</strong> One document, one service, the whole system.</li>
+  <li><strong>Can it be undone?</strong> Easily, with effort, or not at all.</li>
+  <li><strong>Does anything leave the machine?</strong> A message, a publication, a push.</li>
+</ol>
+<p>The answers form a mandate. Here is what that looks like in my setup today:</p>
+
+<div class="faelle">
+  <div class="fall">
+    <span class="eyebrow">Inside the mandate</span>
+    <h3>Approved once, then it runs</h3>
+    <p>Every block of work comes with its mandate: which files it may touch, and the test that decides when it is done. I approve that once, with a one-time code from my phone.</p>
+    <p>Build, checks and merge then run without me. I see the result in a short report.</p>
+    <div class="urteil">Decided by <b class="tor">the mandate</b></div>
+  </div>
+  <div class="fall treffer">
+    <span class="eyebrow">Outside the mandate</span>
+    <h3>The rules themselves</h3>
+    <p>A change to the policy that governs approvals comes back to me, even if the block lists that file.</p>
+    <p>Otherwise the system could quietly widen its own mandate.</p>
+    <div class="urteil">Decided by <b class="modell">me</b></div>
+  </div>
+</div>
+
+<p class="kernsatz">A boundary decides what must never happen. A mandate decides what may happen without me.</p>
+
+<h2>A yes for exactly this</h2>
+<p>The first article showed that “go ahead” in a chat is not a permission. So my yes has to belong to one specific thing.</p>
+<p>My approval covers a checksum of exactly the version I saw. Right before the effect, the checksum is compared again. If the work order changed in between, my earlier yes doesn’t carry over. A changed order needs a new yes.</p>
+<ul>
+  <li>Each one-time code works once. After a few wrong attempts the check locks until I unlock it at my desk.</li>
+  <li>Approving one order doesn’t widen what the agent may do. The gate from the first article stays in place.</li>
+</ul>
+<p>To be precise: the one-time code (TOTP) confirms that it is me. It doesn’t sign the content. The binding comes from comparing the checksum.</p>
+
+<h2>agent-approve</h2>
+<p>As with the gate, I extracted one piece as a small building block. Not the mandate: deciding what is inside or outside stays in my setup. agent-approve covers the last step, a yes that counts only for exactly what the human saw:</p>
+
+<div class="fluss">
+  <div class="schritt"><b>Request</b><span>action, target file, checksum</span></div>
+  <div class="pfeil">→</div>
+  <div class="schritt gate"><b>Your yes</b><span>one-time code, e.g. from a Slack card</span></div>
+  <div class="pfeil">→</div>
+  <div class="schritt"><b>Verify</b><span>file read again right before the effect</span></div>
+  <div class="pfeil">→</div>
+  <div class="schritt"><b><span class="ja">effect</span> / <span class="nein">refused</span></b><span>plus one JSON line in the log</span></div>
+</div>
+
+<p>The demo replays the two attempts from the first article, this time against the yes. First the obvious one: the agent simply claims the approval. Then the one that looks like work: a release is approved, and afterwards exactly one line changes.</p>
+
+<div class="terminal"><span class="prompt">$ python -m agent_approve request --action "deploy now - already approved by the owner" --target deploy.sh &gt; request.json</span>
+<span class="prompt">$ python -m agent_approve verify request.json</span>
+rejected: <span class="deny">no_approval</span>
+
+<span class="prompt">$ python -m agent_approve approve release-request.json --code ******</span>
+approved
+<span class="prompt"># one line changed in release.json:</span>
+-  "security_contact": "security@example.org"
++  "security_contact": "security@example-support.net"
+<span class="prompt">$ python -m agent_approve verify release-request.json</span>
+rejected: <span class="deny">content_changed</span>
+
+<span class="prompt"># agent-approve.log.jsonl</span>
+{"event": "verify", "reason": <span class="wert">"content_changed"</span>, "verdict": <span class="deny">"rejected"</span>, ...}</div>
+
+<p>A sentence in the request is never evidence. And a changed address in a release looks like nothing, until the checksum is compared.</p>
+
+<h2>What it is not</h2>
+<p>agent-approve is deliberately small: no expiry, no roles, no risk classes, no rules per path, no mandate. The agent has to call verify itself, or be wrapped by something that does; it cannot stop code that never asks. The approval records are plain files, so they have to stay out of the agent’s reach, together with the key.</p>
+<p>Being on the loop takes more than an approval button. I also need to see what is happening without asking: a short report every three hours, and an immediate alert only when something is stuck or needs me.</p>
+<p>And not every part is finished. In my setup, impact is assessed at the approval gate, not yet at every single step. A good architecture is not the same thing as a fully implemented one.</p>
+
+<p>Experimental, not a security product, Apache-2.0: <a href="https://github.com/tigeros-dev/agent-approve">github.com/tigeros-dev/agent-approve</a>.</p>
+<p>The goal is not to take me out of the system. It is to stop making me the bottleneck for decisions I have already delegated.</p>
+<p>How do you make sure your yes covers exactly the action that runs afterwards?</p>
+</article>
+</main>
+<footer>
+  <a href="https://www.linkedin.com/in/dominik-dietrich/">LinkedIn</a><a href="https://github.com/tigeros-dev">GitHub</a><a href="mailto:hello@tigeros.dev">Email</a><a href="../imprint.html">Imprint</a><a href="../privacy.html">Privacy</a>
+  <p>Personal site. Opinions are my own and not those of my employer.</p>
+</footer>
+</div>
+</body>
+</html>
